@@ -7,7 +7,7 @@
   "preferences": {
     "duplex": true,
     "scale": 0.6,
-    "format": "A4",
+    "format": "Letter",
     "printBackground": true
   }
 }

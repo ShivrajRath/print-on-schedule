@@ -11,7 +11,7 @@ import { log } from './logger.js';
  * @param {boolean} options.duplex  - true → two-sided-long-edge, false → one-sided.
  * @returns {Promise<void>}
  */
-function sendToPrinter(pdfPath, { printer, duplex }) {
+function sendToPrinter(pdfPath, { printer, duplex, format }) {
   return new Promise((resolve, reject) => {
     const args = [];
 
@@ -22,6 +22,11 @@ function sendToPrinter(pdfPath, { printer, duplex }) {
 
     // Duplex / simplex.
     args.push('-o', duplex ? 'sides=two-sided-long-edge' : 'sides=one-sided');
+
+    // Tell CUPS exactly what paper size the PDF uses — prevents "needs paper" mismatch errors.
+    if (format) {
+      args.push('-o', `media=${format}`);
+    }
 
     // Fit content to page.
     args.push('-o', 'fit-to-page');
@@ -56,6 +61,7 @@ export async function printAll(pdfPaths, config) {
       await sendToPrinter(pdfPath, {
         printer,
         duplex: preferences.duplex ?? false,
+        format: preferences.format,
       });
     } catch (err) {
       log.error(`Failed to print ${pdfPath}: ${err.message}`);
