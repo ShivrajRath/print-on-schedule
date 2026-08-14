@@ -6,6 +6,10 @@ import { log } from './logger.js';
 /**
  * Renders a list of URLs to PDF files using Puppeteer.
  *
+ * Uses `@media print` mode so the page renders exactly as it would when
+ * clicking the browser's Print button — honoring print-specific CSS
+ * (e.g. hiding navbars, applying print columns, removing backgrounds).
+ *
  * Each page is navigated with `networkidle0` to ensure it is fully loaded
  * (no open network connections for 500 ms) before generating the PDF.
  *
@@ -30,17 +34,15 @@ export async function renderPages(urls, preferences) {
       log.step(`Loading: ${url}`);
       const page = await browser.newPage();
 
-      // Set a wide viewport so the page renders its full desktop layout.
-      await page.setViewport({ width: 1280, height: 900 });
+      // Switch to print media BEFORE navigation so the browser fetches
+      // and applies @media print stylesheets from the start.
+      await page.emulateMediaType('print');
 
       // Navigate and wait until the network is completely idle.
       await page.goto(url, {
         waitUntil: 'networkidle0',
         timeout: 90_000,
       });
-
-      // Render the page as it appears on screen (not the @media print version).
-      await page.emulateMediaType('screen');
 
       // Generate the PDF.
       const fileName = `print_${Date.now()}_${pdfPaths.length}.pdf`;
