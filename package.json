@@ -1,0 +1,18 @@
+{
+  "name": "print-on-schedule",
+  "version": "1.0.0",
+  "description": "Automatically print webpages on a cron schedule using Puppeteer and macOS lp",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "print-on-schedule": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "print-now": "node src/index.js --now"
+  },
+  "dependencies": {
+    "node-cron": "^3.0.3",
+    "puppeteer": "^25.7.0"
+  }
+}

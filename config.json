@@ -1,0 +1,13 @@
+{
+  "schedule": "15 6 * * *",
+  "printer": "",
+  "pages": [
+    "https://novicelab.org/newspaper/"
+  ],
+  "preferences": {
+    "duplex": true,
+    "scale": 0.6,
+    "format": "A4",
+    "printBackground": true
+  }
+}
